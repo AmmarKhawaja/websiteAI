@@ -1,12 +1,127 @@
 body {
-    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-family: "Montserrat", sans-serif;
+    letter-spacing: 0.3px;
     font-size: 16px;
+    margin: 0;
 }
 h1 {
-    font-weight: 500;
-    font-size: 30px;
+    font-weight: bolder;
+    font-size: 35px;
     text-align: center;
 }
 h2 {
-    font-weight: 500;
+    font-weight: 600;
+    margin-left: 10%;
+    margin-right: 10%;
 }
+p {
+    margin: 10px;
+    font-weight: 600;
+    margin-left: 10%;
+    margin-right: 10%;
+    line-height: 30px;
+}
+hr {
+    height: 5px;
+    background-color: rgb(0, 83, 190);
+    border-width: 0;
+    margin-left: 10%;
+    margin-right: 70%;
+}
+.hrtitle {
+    height: 5px;
+    background-color: rgb(0, 83, 190);
+    border-width: 0;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+.container {
+
+}
+.child1 {
+    width: 80%;
+    float: left;
+}
+.child2 {
+    width: 20%;
+    float: left;
+}
+@media (max-width : 900px)  {
+    .child1 {
+      width: 100%;
+    }
+    .child2 {
+      width: 100%;
+    }
+}
+
+a {
+  text-decoration: none;
+}
+
+a {
+    text-decoration: none;
+  }
+  
+  
+  ul {
+    background: darkorange;
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+  }
+  
+  li {
+    color: #fff;
+    background: rgb(0, 83, 190);
+    display: block;
+    float: left;
+    position: relative;
+    text-decoration: none;
+    transition-duration: 0.5s;
+    width: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+  }
+    
+  li a {
+    color: #fff;
+  }
+  
+  li:hover,
+  li:focus-within {
+    background: rgb(6, 0, 94);
+    cursor: pointer;
+  }
+  
+  li:focus-within a {
+    outline: none;
+  }
+  
+  ul li ul {
+    background: rgb(0, 83, 190);
+    visibility: hidden;
+    opacity: 0;
+    min-width: 5rem;
+    position: absolute;
+    transition: all 0.5s ease;
+    left: 0;
+    display: none;
+    width: 100%;
+    padding-top: 0.1rem;
+  }
+  
+  ul li:hover > ul,
+  ul li:focus-within > ul,
+  ul li ul:hover,
+  ul li ul:focus {
+     visibility: visible;
+     opacity: 1;
+     display: block;
+  }
+  
+  ul li ul li {
+    clear: both;
+    width: 100%;
+  }

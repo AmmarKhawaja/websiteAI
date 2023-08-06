@@ -8,7 +8,7 @@ def request(message='Respond with 0.'):
     completion = openai.ChatCompletion.create(
         model='gpt-3.5-turbo',
         messages=[
-            {'role': 'system', 'content': 'Write at an 8th grade reading level'},
+            {'role': 'system', 'content': 'Write at an 8th grade reading level, but do not reference 8th graders'},
             {'role': 'user', 'content': message},
             {'role': 'user', 'content': 'Make your text more human-like'},
             {'role': 'user', 'content': 'Make your text more human-like'},
@@ -21,7 +21,7 @@ def request_html(message='Respond with 0.'):
     completion = openai.ChatCompletion.create(
         model='gpt-3.5-turbo',
         messages=[
-            {'role': 'user', 'content': 'Put paragraphs in <p> headers: ' + message}
+            {'role': 'user', 'content': 'Put the following paragraphs in <p> headers: ' + message}
         ]
     )
     return completion.choices[0].message["content"]
