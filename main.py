@@ -1,20 +1,19 @@
 import gpt
-from google_images_search import GoogleImagesSearch
+import images
+import scrape
 # TODO
 # DONE Create multiple articles
-# DO Add Grammarly/other Grammar API
+# DO Add images support
+# Add anti-AI API (maybe not)
+# DO Add competitor analysis
 # DO Add AI detection API
 
 if __name__ == '__main__':
 
-    gis = GoogleImagesSearch('AIzaSyD_AyoZAEXq1DORAeC8M5acHfMCo09c6AQ',
-                             'c4dcfc950d8b84a15')
-    _search_params = {
-    'q': 'apple',
-    'num': 1,
-    }  
-    gis.search(search_params=_search_params)
-
+    # images.get_image()
+    t = scrape.get_raw_text('vitamin d dog overdosea')
+    print(t)
+    # print(scrape.get_common_words(t))
     exit()
     gpt.setup()
     MAIN_TOPICS = ['Why is Vitamin D Required?', 'Why Vitamin D Gets Low', 'Vitamin D Dog Overdose',

@@ -1,1 +1,7 @@
 \secret.py
+\pages\*
+\rawtext\*
+\images\*
+\.idea
+\__pycache
+\NavBar.html
