@@ -4,27 +4,37 @@ import scrape
 # TODO
 # DONE Create multiple articles
 # DO Add images support
-# Add anti-AI API (maybe not)
-# DO Add competitor analysis
+# DONE Add competitor analysis
 # DO Add AI detection API
+# DO Add Google Analytics
 
 if __name__ == '__main__':
 
-    # images.get_image()
-    t = scrape.get_raw_text('vitamin d dog overdosea')
-    print(t)
-    # print(scrape.get_common_words(t))
-    exit()
     gpt.setup()
-    MAIN_TOPICS = ['Why is Vitamin D Required?', 'Why Vitamin D Gets Low', 'Vitamin D Dog Overdose',
-                    'Can Too Much Vitamin D Cause Skin Issues?', 'What Diseases Cause High Vitamin D?',]
+
+    FILE_LOCATION = 'pages\\vitamind\\'
+
+    MAIN_TOPICS = ['Vitamin D Dog Overdose', ]#'Why is Vitamin D Required?', 'Why Vitamin D Gets Low',
+                    #'Can Too Much Vitamin D Cause Skin Issues?', 'What Diseases Cause High Vitamin D?',]
+    
+    COMP_LINKS = [['https://vcahospitals.com/know-your-pet/vitamin-d-poisoning-in-dogs',
+                   'https://www.fda.gov/animal-veterinary/animal-health-literacy/vitamin-d-toxicity-dogs',
+                   'https://www.iowaveterinaryspecialties.com/student-scholars/vitamin-d-toxicosis']]
+    
     TOPICS = [
+        [
+            'Symptoms',
+            'Causes',
+            'Diagnosis',
+            'Treatment',
+            'After Treatment',
+        ],
         [
             'Evidence',
             'Recommended Amounts',
             'Food Sources',
             'Ultraviolet Light',
-*            'Signs of Deficiency',
+            'Signs of Deficiency',
         ],
         [
             'What is Vitamin D Deficiency?',
@@ -36,13 +46,6 @@ if __name__ == '__main__':
             'How is Vitamin D Deficiency Diagnosed?',
             'How is Vitamin D Deficiency Treated??',
             'How can I Prevent Vitamin D Deficiency?',
-        ],
-        [
-            'Symptoms',
-            'Causes',
-            'Diagnosis',
-            'Treatment',
-            'After Treatment',
         ],
         [
             'Side Effects',
@@ -58,18 +61,22 @@ if __name__ == '__main__':
             'Contact Your Doctor'
         ]
     ]
-    WORD_COUNTS = [300, 300, 200, 250, 200]
-    FILE_LOCATION = 'pages\\vitamind\\'
-
-    #print(gpt.request(message='Give me 10 subtopics less than 10 words about ' + MAIN_TOPICS[len(MAIN_TOPICS) - 1]
-    #                            + '. Format it like this |title|'))
-    #a = input('Press Enter to Continue:')
 
     for topic in range(len(MAIN_TOPICS)):
         PERCENT_COMPLETE = 0
         TEXT = ''
         TEXT_RAW = ''
         TMP = ''
+        t = scrape.get_raw_text(COMP_LINKS[topic][0]) + scrape.get_raw_text(COMP_LINKS[topic][1]) + scrape.get_raw_text(COMP_LINKS[topic][2])
+        data_for_gpt = 'Also, use the word '
+
+        data = scrape.get_percent_words(t)
+        for key in data:
+
+            data_for_gpt += '"' + key + '" about ' + str(round(data[key], 1)) + '% of the time, '
+
+        SECTION_WORDCOUNT = int(scrape.get_wordcount(t) / len(COMP_LINKS[topic]) / len(TOPICS[topic]))
+
         HEAD = '<!DOCTYPE html>\n<html>\n<head>\n<title>' + MAIN_TOPICS[topic] + r'</title>' + '\n<meta name=\"description\" content=\"'
 
         f = open(FILE_LOCATION + MAIN_TOPICS[topic].replace(' ', '').replace('?', '') + '.html', 'w')
@@ -82,21 +89,20 @@ if __name__ == '__main__':
             if i == 0:
                 TEXT += '<h1>' + MAIN_TOPICS[topic] + '</h1>\n<hr class="hrtitle">\n'
                 INTRO = gpt.request(
-                    message='Write 100 words introducing an article about ' + MAIN_TOPICS[topic]) + 'without giving any details'
+                    message='Write 100 words introducing an article about ' + MAIN_TOPICS[topic] + 'without giving any details, ' + data_for_gpt)
                 TEXT += '<p>' + INTRO + '/p>'
                 HEAD += INTRO + '\">\n<link rel="stylesheet" href="..\\styles.css">\n<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">\n</head>'
 
                 TEXT += '\n<br>\n<h2>' + TOPICS[topic][i] + '</h2>\n<hr>\n<br>\n'
                 TMP = gpt.request(
-                    message='Write ' + str(WORD_COUNTS[topic]) + ' words about ' + MAIN_TOPICS[topic] + ' ' + TOPICS[topic][i] + "try not to use the phrase 'in conclusion', ")
+                    message='Write ' + str(SECTION_WORDCOUNT) + ' words about ' + MAIN_TOPICS[topic] + ' ' + TOPICS[topic][i] + 'try not to use the phrase "in conclusion", ' + data_for_gpt)
                 TEXT += gpt.request_html(TMP)
                 TEXT_RAW += TMP
             else:
                 TEXT += '\n<br>\n<h2>' + TOPICS[topic][i] + '</h2>\n<hr class="hrtitle">\n'
-                TMP = gpt.request(
-                message='Write ' + str(WORD_COUNTS[topic]) + ' words about ' + TOPICS[topic][i] + "try not to use the phrase 'in conclusion', "
-                                                                "and write as if it is continuing off another paragraph "
-                                                                "about" + MAIN_TOPICS[topic] + ' ' + TOPICS[topic][i - 1])
+                TMP = gpt.request(message='Write ' + str(SECTION_WORDCOUNT) 
+                                  + ' words about ' + TOPICS[topic][i] + ', try not to use the phrase "in conclusion" and write as if it is continuing off another paragraph about ' 
+                                  + MAIN_TOPICS[topic] + ' ' + TOPICS[topic][i - 1] + ', ' + data_for_gpt)
                 TEXT += gpt.request_html(TMP)
                 TEXT_RAW += TMP
             

@@ -20,21 +20,31 @@ def get_raw_text(url='test'):
         'accept-language': 'en-US,en;q=0.9', 
     }] 
     headers = random.choice(headers_list) 
-    return requests.get('https://www.fda.gov/animal-veterinary/animal-health-literacy/vitamin-d-toxicity-dogs#:~:text=Dogs%20with%20excess%20vitamin%20D,develop%20more%20gradually%20over%20time.', headers=headers, proxies=proxy).headers
+    return requests.get(url, headers=headers, proxies=proxy).text
 
-def get_wordcount(text = "SHOULD BE 3"):
+def get_wordcount(text="SHOULD BE 3"):
     split_text = text.split()
-    bl = ['<', '>', '=', '%', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',]
+    bl = ['<', '>', '=', '%', '@', '}', '{', '[', ']', '|', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',]
     for c in bl:
         split_text = [ x for x in split_text if c not in x ]
-    return len(split_text)
+    return len(split_text) * 0.95
 
 def get_common_words(text='TESTING THIS SCRIPT'):
-    split_text = text.split()
-    bl = ['<', '>', '=', '%', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'a', 'in', 'and', 'with', 'can', 'be', 'made', 'you', 'of', 'the', 'from',]
+    split_text = text.lower().split()
+    bl = ['<', '>', '=', '%', '@', '}', '{', '[', ']', '|', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'a', 'in', 'and', 'with', 'can', 'be', 'made', 'you', 'of', 'the', 'from', 'for']
     for c in bl:
         split_text = [ x for x in split_text if c not in x ]
     split_text = [x for x in split_text if len(x) >= 3]
     
     found = Counter(split_text)
-    return found.most_common(10)
+    return found.most_common(5)
+
+def get_percent_words(text=' '):
+    wordcount = get_wordcount(text=text)
+    common_words = get_common_words(text=text)
+    words_percent = {}
+
+    for word in range(len(common_words)):
+        words_percent[common_words[word][0]] = (float(common_words[word][1]) / wordcount) * 100
+
+    return words_percent
