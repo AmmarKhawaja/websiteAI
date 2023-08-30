@@ -35,6 +35,11 @@ hr {
     margin-left: 10%;
     margin-right: 10%;
 }
+img {
+  display: block;
+  margin: 0 auto;
+  max-height: 400px;
+}
 .container {
 
 }
@@ -79,7 +84,7 @@ a {
     position: relative;
     text-decoration: none;
     transition-duration: 0.5s;
-    width: 100%;
+    width: 25%;
     padding-top: 10px;
     padding-bottom: 10px;
     text-align: center;

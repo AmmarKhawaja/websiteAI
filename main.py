@@ -3,10 +3,16 @@ import images
 import scrape
 # TODO
 # DONE Create multiple articles
-# DO Add images support
+# DONE Add images support
 # DONE Add competitor analysis
+# DONE Change Nav (Not SEO friendly)
+# -- RELEASE -- (September)
+# DO Add Google Analytics (IMPORTANT)
+# DO Improve looks
 # DO Add AI detection API
-# DO Add Google Analytics
+# DO Automatic header detection
+# DO Automatic in-text reference
+# DO Look into html embeds (for nav and links)
 
 if __name__ == '__main__':
 
@@ -14,7 +20,7 @@ if __name__ == '__main__':
 
     FILE_LOCATION = 'pages\\vitamind\\'
 
-    MAIN_TOPICS = ['Vitamin D Dog Overdose', ]#'Why is Vitamin D Required?', 'Why Vitamin D Gets Low',
+    MAIN_TOPICS = ['Vitamin D Dog Overdose']#, 'Why is Vitamin D Required?', 'Why Vitamin D Gets Low',
                     #'Can Too Much Vitamin D Cause Skin Issues?', 'What Diseases Cause High Vitamin D?',]
     
     COMP_LINKS = [['https://vcahospitals.com/know-your-pet/vitamin-d-poisoning-in-dogs',
@@ -61,7 +67,15 @@ if __name__ == '__main__':
             'Contact Your Doctor'
         ]
     ]
-
+    IMAGES = [
+        [
+            'Dog Closeup',
+            'Vitamins Closeup',
+            'Vet Photo',
+            ' ',
+            'Cute Dog Photo'
+        ]
+    ]
     for topic in range(len(MAIN_TOPICS)):
         PERCENT_COMPLETE = 0
         TEXT = ''
@@ -77,7 +91,7 @@ if __name__ == '__main__':
 
         SECTION_WORDCOUNT = int(scrape.get_wordcount(t) / len(COMP_LINKS[topic]) / len(TOPICS[topic]))
 
-        HEAD = '<!DOCTYPE html>\n<html>\n<head>\n<title>' + MAIN_TOPICS[topic] + r'</title>' + '\n<meta name=\"description\" content=\"'
+        HEAD = '<!DOCTYPE html>\n<html>\n<head>\n<title>' + MAIN_TOPICS[topic] + '</title>' + '\n<meta name=\"description\" content=\"'
 
         f = open(FILE_LOCATION + MAIN_TOPICS[topic].replace(' ', '').replace('?', '') + '.html', 'w')
         r = open('rawtext\\' + MAIN_TOPICS[topic].replace(' ', '').replace('?', '') + '.txt', 'w')
@@ -105,6 +119,9 @@ if __name__ == '__main__':
                                   + MAIN_TOPICS[topic] + ' ' + TOPICS[topic][i - 1] + ', ' + data_for_gpt)
                 TEXT += gpt.request_html(TMP)
                 TEXT_RAW += TMP
+            img =  images.get_image(desc=IMAGES[topic][i])
+            if img != '0':
+                TEXT += '\n<br><img src="..\\..\\images\\' + img + '.jpg' + '" alt="' + img + '"><br><br>'
             
         TEXT += '\n<br>\n<hr>\n'
         TMP = gpt.request(
