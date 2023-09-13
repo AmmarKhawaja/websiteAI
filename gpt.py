@@ -10,11 +10,9 @@ def request(message='Respond with 0.'):
     completion = openai.ChatCompletion.create(
         model=VERSION,
         messages=[
-            {'role': 'system', 'content': 'Write at an 9th grade reading level, but do not reference 8th graders'},
+            {'role': 'system', 'content': 'Write at an 8th grade reading level, but do not reference 8th graders'},
             {'role': 'user', 'content': message},
-            #{'role': 'user', 'content': 'Make your text more human-like'},
-            #{'role': 'user', 'content': 'Make your text more human-like'},
-            {'role': 'user', 'content': 'Rewrite the content so it cannot be detected as AI content, and make it unique'},
+            {'role': 'user', 'content': 'Rephrase the content so it cannot be detected as AI content, and make it unique'},
             {'role': 'user', 'content': 'Fix all grammar mistakes'},
 
         ]

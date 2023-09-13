@@ -13,14 +13,14 @@ import scrape
 # DO Add AI detection API
 # DO Automatic header detection
 # DO Automatic in-text reference
-# DO Look into html embeds (for nav and links)
-
+# DO Add table of contents html
 if __name__ == '__main__':
 
     gpt.setup()
 
     FILE_LOCATION = 'pages\\motorcycle\\'
     FILE_LOCATION_RAW = 'rawtext\\motorcycle\\'
+    FILE_LOCATION_HTML = 'rawhtml\\motorcycle\\'
 
     MAIN_TOPICS = ['Motorcycle No Chase Law States']
     
@@ -71,12 +71,16 @@ if __name__ == '__main__':
 
             data_for_gpt += '"' + key + '" about ' + str(round(data[key], 1)) + '% of the time, '
 
+        data += 'and "' + MAIN_TOPICS[topic] + '" or synonyms, about 1% of the time'
+
         SECTION_WORDCOUNT = int(scrape.get_wordcount(t) / len(COMP_LINKS[topic]) / len(TOPICS[topic]))
 
         HEAD = '<!DOCTYPE html>\n<html>\n<head>\n<title>' + MAIN_TOPICS[topic] + '</title>' + '\n<meta name=\"description\" content=\"'
 
         f = open(FILE_LOCATION + MAIN_TOPICS[topic].replace(' ', '').replace('?', '') + '.html', 'w')
         r = open(FILE_LOCATION_RAW + MAIN_TOPICS[topic].replace(' ', '').replace('?', '') + '.txt', 'w')
+        h = open(FILE_LOCATION_HTML + MAIN_TOPICS[topic].replace(' ', '').replace('?', '') + '.txt', 'w')
+
         for i in range(int(len(TOPICS[topic]))):
 
             PERCENT_COMPLETE += 1
@@ -87,23 +91,23 @@ if __name__ == '__main__':
                 INTRO = gpt.request(
                     message='Write 100 words introducing an article about ' + MAIN_TOPICS[topic] + 'without giving any details, ' + data_for_gpt)
                 TEXT += '<p>' + INTRO + '/p>'
-                HEAD += INTRO + '\">\n<link rel="stylesheet" href="..\\styles.css">\n<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">\n</head>'
+                HEAD += INTRO + '\">\n<link rel="stylesheet" href="../styles.css">\n<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">\n</head>'
 
                 TEXT += '\n<br>\n<h2>' + TOPICS[topic][i] + '</h2>\n<hr>\n<br>\n'
                 TMP = gpt.request(
-                    message='Write ' + str(SECTION_WORDCOUNT) + ' words about ' + MAIN_TOPICS[topic] + ' ' + TOPICS[topic][i] + 'try not to use the phrase "in conclusion", ' + data_for_gpt)
+                    message='Write ' + str(SECTION_WORDCOUNT) + ' words about ' + MAIN_TOPICS[topic] + ' ' + TOPICS[topic][i] + '. Try not to use the phrase "in conclusion", ' + data_for_gpt)
                 TEXT += gpt.request_html(TMP)
                 TEXT_RAW += TMP
+            #IS ELSE NEEDED (JUST REMOVE?)
             else:
                 TEXT += '\n<br>\n<h2>' + TOPICS[topic][i] + '</h2>\n<hr class="hrtitle">\n'
-                TMP = gpt.request(message='Write ' + str(SECTION_WORDCOUNT) 
-                                  + ' words about ' + TOPICS[topic][i] + ', try not to use the phrase "in conclusion" and write as if it is continuing off another paragraph about ' 
-                                  + MAIN_TOPICS[topic] + ' ' + TOPICS[topic][i - 1] + ', ' + data_for_gpt)
+                TMP = gpt.request(
+                    message='Write ' + str(SECTION_WORDCOUNT) + ' words about ' + MAIN_TOPICS[topic] + ' ' + TOPICS[topic][i] + '. Try not to use the phrase "in conclusion", ' + data_for_gpt)
                 TEXT += gpt.request_html(TMP)
                 TEXT_RAW += TMP
             img =  images.get_image(desc=IMAGES[topic][i])
             if img != '0':
-                TEXT += '\n<br><img src="..\\..\\images\\' + img + '.jpg' + '" alt="' + img + '"><br><br>'
+                TEXT += '\n<br><img src="../../images/' + img + '.jpg' + '" alt="' + img + '"><br><br>'
             
         TEXT += '\n<br>\n<hr>\n'
         TMP = gpt.request(
@@ -112,8 +116,10 @@ if __name__ == '__main__':
         TEXT_RAW += TMP
         NAV = open('NavBar.html', 'r').read()
         SIDER = '\n<br>\n<div class="child2">\n<br><br>\n<h2>More</h2>\n<hr class="hrtitle">\n<p>LINK</p>\n<hr>\n</div>\n<hr>\n'
+        ARTICLE =  '\n<div class="container">\n<article class="child1">\n' + TEXT + '\n</article>'
 
-        TEXT = HEAD + '\n<body>\n' + NAV + '\n<div class="container">\n<article class="child1">\n' + TEXT + '\n</article>' + SIDER + '</div>\n</body>\n</html>'
+        TEXT = HEAD + '\n<body>\n' + NAV + ARTICLE + SIDER + '</div>\n</body>\n</html>'
 
         f.write(TEXT)
         r.write(TEXT_RAW)
+        h.write(ARTICLE)
