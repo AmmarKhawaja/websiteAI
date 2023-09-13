@@ -12,8 +12,7 @@ import scrape
 # DO Add AI detection API
 # DO Automatic header detection
 # DO Automatic in-text reference
-# DO Look into html embeds (for nav and links)
-
+# DO Add table of contents html
 if __name__ == '__main__':
 
     gpt.setup()
@@ -29,7 +28,7 @@ if __name__ == '__main__':
     
     TOPICS = [
         [
-            ['Symptoms', 'description'],
+            ['Symptoms'],
             ['Causes',],
             ['Diagnosis',],
             ['Treatment',],
@@ -58,6 +57,8 @@ if __name__ == '__main__':
 
             data_for_gpt += '"' + key + '" about ' + str(round(data[key], 1)) + '% of the time, '
 
+        data += 'and "' + MAIN_TOPICS[topic] + '" or synonyms, about 1% of the time'
+
         SECTION_WORDCOUNT = int(scrape.get_wordcount(t) / len(COMP_LINKS[topic]) / len(TOPICS[topic]))
 
         HEAD = '<!DOCTYPE html>\n<html>\n<head>\n<title>' + MAIN_TOPICS[topic] + '</title>' + '\n<meta name=\"description\" content=\"'
@@ -79,14 +80,14 @@ if __name__ == '__main__':
 
                 TEXT += '\n<br>\n<h2>' + TOPICS[topic][i] + '</h2>\n<hr>\n<br>\n'
                 TMP = gpt.request(
-                    message='Write ' + str(SECTION_WORDCOUNT) + ' words about ' + MAIN_TOPICS[topic] + ' ' + TOPICS[topic][i][0] + ',' + TOPICS[topic][i][1] + '. Try not to use the phrase "in conclusion", ' + data_for_gpt)
+                    message='Write ' + str(SECTION_WORDCOUNT) + ' words about ' + MAIN_TOPICS[topic] + ' ' + TOPICS[topic][i] + '. Try not to use the phrase "in conclusion", ' + data_for_gpt)
                 TEXT += gpt.request_html(TMP)
                 TEXT_RAW += TMP
             #IS ELSE NEEDED (JUST REMOVE?)
             else:
                 TEXT += '\n<br>\n<h2>' + TOPICS[topic][i] + '</h2>\n<hr class="hrtitle">\n'
                 TMP = gpt.request(
-                    message='Write ' + str(SECTION_WORDCOUNT) + ' words about ' + MAIN_TOPICS[topic] + ' ' + TOPICS[topic][i][0] + ',' + TOPICS[topic][i][1] + '. Try not to use the phrase "in conclusion", ' + data_for_gpt)
+                    message='Write ' + str(SECTION_WORDCOUNT) + ' words about ' + MAIN_TOPICS[topic] + ' ' + TOPICS[topic][i] + '. Try not to use the phrase "in conclusion", ' + data_for_gpt)
                 TEXT += gpt.request_html(TMP)
                 TEXT_RAW += TMP
             img =  images.get_image(desc=IMAGES[topic][i])
