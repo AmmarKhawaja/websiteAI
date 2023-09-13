@@ -89,7 +89,7 @@ if __name__ == '__main__':
             if i == 0:
                 TEXT += '<h1>' + MAIN_TOPICS[topic] + '</h1>\n<hr class="hrtitle">\n'
                 INTRO = gpt.request(
-                    message='Write 100 words introducing an article about ' + MAIN_TOPICS[topic] + 'without giving any details, ' + data_for_gpt)
+                    message='Write 100 words introducing an article about ' + MAIN_TOPICS[topic] + 'without giving any details, ' + data_for_gpt).replace('"', '')
                 TEXT += '<p>' + INTRO + '/p>'
                 HEAD += INTRO + '\">\n<link rel="stylesheet" href="../styles.css">\n<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">\n</head>'
 
@@ -114,6 +114,7 @@ if __name__ == '__main__':
             message='Write 100 words concluding an article about ' + MAIN_TOPICS[topic] + 'without giving any details')
         TEXT += gpt.request_html(TMP)
         TEXT_RAW += TMP
+
         NAV = open('NavBar.html', 'r').read()
         SIDER = '\n<br>\n<div class="child2">\n<br><br>\n<h2>More</h2>\n<hr class="hrtitle">\n<p>LINK</p>\n<hr>\n</div>\n<hr>\n'
         ARTICLE =  '\n<div class="container">\n<article class="child1">\n' + TEXT + '\n</article>'
