@@ -5,7 +5,8 @@ import scrape
 # DONE Create multiple articles
 # DONE Add images support
 # DONE Add competitor analysis
-# DONE Change Nav (Not SEO friendly)
+# DONE
+# + Change Nav (Not SEO friendly)
 # -- RELEASE -- (September)
 # DO Add Google Analytics (IMPORTANT)
 # DO Improve looks
@@ -18,70 +19,51 @@ if __name__ == '__main__':
 
     gpt.setup()
 
-    FILE_LOCATION = 'pages\\vitamind\\'
+    FILE_LOCATION = 'pages\\motorcycle\\'
+    FILE_LOCATION_RAW = 'rawtext\\motorcycle\\'
 
-    MAIN_TOPICS = ['Vitamin D Dog Overdose']#, 'Why is Vitamin D Required?', 'Why Vitamin D Gets Low',
-                    #'Can Too Much Vitamin D Cause Skin Issues?', 'What Diseases Cause High Vitamin D?',]
+    MAIN_TOPICS = ['Motorcycle No Chase Law States']
     
-    COMP_LINKS = [['https://vcahospitals.com/know-your-pet/vitamin-d-poisoning-in-dogs',
-                   'https://www.fda.gov/animal-veterinary/animal-health-literacy/vitamin-d-toxicity-dogs',
-                   'https://www.iowaveterinaryspecialties.com/student-scholars/vitamin-d-toxicosis']]
+    COMP_LINKS = [
+        [
+            'https://www.apexriders.com/can-police-chase-motorcycles/#:~:text=States%20with%20No%20chase%20Law%20for%20Motorcycles&text=Alabama%20holds%20a%20unique%20position,no%20chase%20law%20for%20motorcycles.',
+            'https://awajis.com/us/motorcycle-no-chase-law-states/',
+        ]
+    ]
     
     TOPICS = [
         [
-            'Symptoms',
-            'Causes',
-            'Diagnosis',
-            'Treatment',
-            'After Treatment',
+            'Which States Have No Chase Law for Motorcycles',
+            'Initiation of Pursuit',
+            'Termination of Pursuit',
+            'Can Police Chase Motorcycle Riders Without Helmets?',
+            'Is There a Speed Where Cops Won\'t Chase You?',
+            'Can Motorcycles Outrun Cops?',
+            'Can Cops Hit Motorcycles',
         ],
-        [
-            'Evidence',
-            'Recommended Amounts',
-            'Food Sources',
-            'Ultraviolet Light',
-            'Signs of Deficiency',
-        ],
-        [
-            'What is Vitamin D Deficiency?',
-            'Why is Vitamin D so Important?',
-            'Who does Vitamin D Deficiency Affect?',
-            'How Common is Vitamin D Deficiency?',
-            'What Causes Vitamin D Deficiency?',
-            'Weight Loss Surgeries and Vitamin D Deficiency',
-            'How is Vitamin D Deficiency Diagnosed?',
-            'How is Vitamin D Deficiency Treated??',
-            'How can I Prevent Vitamin D Deficiency?',
-        ],
-        [
-            'Side Effects',
-            'Treatment',
-            'Prevention',
-        ],
-        [
-            'Diseases',
-            'Causes',
-            'Diagnosis',
-            'Treatment',
-            'Prevention',
-            'Contact Your Doctor'
-        ]
     ]
     IMAGES = [
         [
-            'Dog Closeup',
-            'Vitamins Closeup',
-            'Vet Photo',
+            'Police Officer on Motorcycle',
             ' ',
-            'Cute Dog Photo'
+            'Police Sirens',
+            ' ',
+            'Motorcycle rider with no helmet',
+            'Person riding sport bike',
+            'Motorcycle rider racing',
+            'Police pit manuever'
         ]
     ]
+
+
     for topic in range(len(MAIN_TOPICS)):
         PERCENT_COMPLETE = 0
         TEXT = ''
         TEXT_RAW = ''
         TMP = ''
-        t = scrape.get_raw_text(COMP_LINKS[topic][0]) + scrape.get_raw_text(COMP_LINKS[topic][1]) + scrape.get_raw_text(COMP_LINKS[topic][2])
+        t = ''
+        for i in range(len(COMP_LINKS[topic])):
+            t += scrape.get_raw_text(COMP_LINKS[topic][i])
         data_for_gpt = 'Also, use the word '
 
         data = scrape.get_percent_words(t)
@@ -94,7 +76,7 @@ if __name__ == '__main__':
         HEAD = '<!DOCTYPE html>\n<html>\n<head>\n<title>' + MAIN_TOPICS[topic] + '</title>' + '\n<meta name=\"description\" content=\"'
 
         f = open(FILE_LOCATION + MAIN_TOPICS[topic].replace(' ', '').replace('?', '') + '.html', 'w')
-        r = open('rawtext\\' + MAIN_TOPICS[topic].replace(' ', '').replace('?', '') + '.txt', 'w')
+        r = open(FILE_LOCATION_RAW + MAIN_TOPICS[topic].replace(' ', '').replace('?', '') + '.txt', 'w')
         for i in range(int(len(TOPICS[topic]))):
 
             PERCENT_COMPLETE += 1
