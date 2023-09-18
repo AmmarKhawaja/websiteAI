@@ -71,7 +71,7 @@ if __name__ == '__main__':
 
             data_for_gpt += '"' + key + '" about ' + str(round(data[key], 1)) + '% of the time, '
 
-        data += 'and "' + MAIN_TOPICS[topic] + '" or synonyms, about 1% of the time'
+        data_for_gpt += 'and "' + MAIN_TOPICS[topic] + '" or synonyms, about 1% of the time'
 
         SECTION_WORDCOUNT = int(scrape.get_wordcount(t) / len(COMP_LINKS[topic]) / len(TOPICS[topic]))
 
@@ -116,9 +116,9 @@ if __name__ == '__main__':
         TEXT_RAW += TMP
         NAV = open('NavBar.html', 'r').read()
         SIDER = '\n<br>\n<div class="child2">\n<br><br>\n<h2>More</h2>\n<hr class="hrtitle">\n<p>LINK</p>\n<hr>\n</div>\n<hr>\n'
-        ARTICLE =  '\n<div class="container">\n<article class="child1">\n' + TEXT + '\n</article>'
+        ARTICLE =  '\n<article class="child1">\n' + TEXT + '\n</article>'
 
-        TEXT = HEAD + '\n<body>\n' + NAV + ARTICLE + SIDER + '</div>\n</body>\n</html>'
+        TEXT = HEAD + '\n<body>\n' + NAV + + '\n<div class="container">' + ARTICLE + SIDER + '</div>\n</body>\n</html>'
 
         f.write(TEXT)
         r.write(TEXT_RAW)
