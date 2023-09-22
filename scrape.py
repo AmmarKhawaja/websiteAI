@@ -24,9 +24,10 @@ def get_raw_text(url='test'):
 
 def get_wordcount(text="SHOULD BE 3"):
     split_text = text.split()
-    bl = ['<', '>', '=', '%', '@', '}', '{', '[', ']', '|', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',]
+    bl = [';', '-', '.', '_', '<', '>', '=', '%', '@', '{', '}', '[', ']', '(', ')', '\\', '/', '|', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',]
     for c in bl:
         split_text = [ x for x in split_text if c not in x ]
+    print(split_text)
     return len(split_text) * 0.95
 
 def get_common_words(text='TESTING THIS SCRIPT'):

@@ -1,7 +1,7 @@
 import openai
 import secret as s
 
-VERSION = 'gpt-3.5-turbo'
+VERSION = 'gpt-4'
 
 def setup():
     openai.api_key = s.CHATGPT_API_KEY
